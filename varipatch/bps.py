@@ -124,14 +124,18 @@ def validate_patch(bps_patch):
             copy_data = decode_number(bps_patch)
             target_relative_offset = (-1 if (copy_data & 1) else 1) * (copy_data >> 1)
             outread_position += target_relative_offset
+            error_details += "\nTRO: {}".format(target_relative_offset)
             if outread_position < 0:
-                raise ValueError("Attempted to read beyond beginning of target.\n{}\nTRO: {}".format(error_details, target_relative_offset))
+                raise ValueError("Attempted to read beyond beginning of target.\n{}".format(error_details))
             if outread_position >= target_position:
                 raise ValueError("Attempted to read beyond end of target.\n{}".format(error_details))
             target_position += length
             if target_position > target_size:
                 raise ValueError("Attempted to write beyond end of target.\n{}".format(error_details))
             outread_position += length
+    
+    if target_position != target_size:
+        raise ValueError("Final patch size incorrect. Expected: {}. Actual: {}".format(target_size, target_position))
 
 def patch(source, bps_patch):
     """Return a bytestream containing the patched source."""
