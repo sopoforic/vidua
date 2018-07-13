@@ -11,6 +11,8 @@ valid_test_files = [
     ('test_bps_b.bps', 'test_bps_b_original.txt', 'test_bps_b_modified.txt'),
 ]
 
+valid_test_files = [tuple(os.path.join(BASE_PATH, part) for part in group) for group in valid_test_files]
+
 @pytest.mark.parametrize("bps_patch_file", (f[0] for f in valid_test_files))
 def test_validate(bps_patch_file):
     with open(os.path.join(BASE_PATH, bps_patch_file), 'rb') as bps_file:
@@ -25,9 +27,9 @@ def test_bps_a_get_info():
         assert info['source_checksum'] == 0xcbc5f68d
         assert info['final_checksum'] == 0x9dde9720
 
-@pytest.mark.parametrize("bps_patch_file,original_file,modified_file", valid_test_files)
-def test_apply(bps_patch_file, original_file, modified_file):
-    with open(os.path.join(BASE_PATH, bps_patch_file), 'rb') as bps_patch:
-        with open(os.path.join(BASE_PATH, original_file), 'rb') as original:
-            with open(os.path.join(BASE_PATH, modified_file), 'rb') as modified:
-                assert bps.patch(original, bps_patch).read() == modified.read()
+@pytest.mark.parametrize("bps_path,original_path,modded_path", valid_test_files)
+def test_apply(bps_path, original_path, modded_path):
+    with open(bps_path, 'rb') as patch:
+        with open(original_path, 'rb') as original:
+            with open(modded_path, 'rb') as modded:
+                assert bps.patch(original, patch).read() == modded.read()
