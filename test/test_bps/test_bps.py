@@ -13,9 +13,9 @@ valid_test_files = [
 
 valid_test_files = [tuple(os.path.join(BASE_PATH, part) for part in group) for group in valid_test_files]
 
-@pytest.mark.parametrize("bps_patch_file", (f[0] for f in valid_test_files))
-def test_validate(bps_patch_file):
-    with open(os.path.join(BASE_PATH, bps_patch_file), 'rb') as bps_file:
+@pytest.mark.parametrize("bps_path", (f[0] for f in valid_test_files))
+def test_validate(bps_path):
+    with open(bps_path, 'rb') as bps_file:
         bps.validate_patch(bps_file)
 
 def test_bps_a_get_info():
