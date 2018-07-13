@@ -6,3 +6,4 @@ hacks.
 ## Supported patch formats
 
 * BPS
+* IPS
