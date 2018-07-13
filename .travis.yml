@@ -10,4 +10,7 @@ python:
   - "3.7-dev" # 3.7 development branch
   - "nightly" # currently points to 3.7-dev
 # command to run tests
+install:
+  - pip install pytest
+  - pip install .
 script: pytest
