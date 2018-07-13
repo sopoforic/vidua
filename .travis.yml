@@ -11,6 +11,6 @@ python:
   - "nightly" # currently points to 3.7-dev
 # command to run tests
 install:
-  - pip install pytest
+  - pip install pytest pytest-cov
   - pip install .
-script: py.test
+script: py.test --cov=vidua
