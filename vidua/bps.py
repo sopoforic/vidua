@@ -9,9 +9,12 @@ def decode_number(bps_patch):
     data = 0
     shift = 1
     while True:
+        pos = bps_patch.tell()
+        end = bps_patch.seek(0, 2)
+        if pos > end - 12:
+            raise ValueError("Invalid number encoding.")
+        bps_patch.seek(pos)
         x = bps_patch.read(1)
-        if not x:
-            raise EOFError("End of file reached before number terminated.")
         x = ord(x)
         data += (x & 0x7f) * shift
         if (x & 0x80):
@@ -59,19 +62,19 @@ def validate_patch(bps_patch):
     try:
         source_size = decode_number(bps_patch)
         logger.debug("Source size: 0x%x", source_size)
-    except EOFError:
+    except ValueError:
         raise ValueError("Failed to decode source size.")
 
     try:
         target_size = decode_number(bps_patch)
         logger.debug("Target size: 0x%x", target_size)
-    except EOFError:
+    except ValueError:
         raise ValueError("Failed to decode target size.")
     
     try:
         metadata_size = decode_number(bps_patch)
         logger.debug("Metadata size: 0x%x", metadata_size)
-    except EOFError:
+    except ValueError:
         raise ValueError("Failed to decode metadata size.")
 
     if metadata_size + bps_patch.tell() > patch_end - 12:
