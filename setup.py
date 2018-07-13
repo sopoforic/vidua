@@ -1,8 +1,8 @@
 from setuptools import setup
 
-setup(name='varipatch',
+setup(name='vidua',
       description='Apply patches to ROMs and other files',
-      url='http://github.com/sopoforic/varipatch',
+      url='http://github.com/sopoforic/vidua',
       author='Tracy Poff',
       author_email='tracy.poff@gmail.com',
       classifiers=[
@@ -10,7 +10,7 @@ setup(name='varipatch',
           'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
           'Topic :: Utilities',
       ],
-      packages=['varipatch'],
+      packages=['vidua'],
       setup_requires=['setuptools_scm'],
       use_scm_version=True,
       zip_safe=True)

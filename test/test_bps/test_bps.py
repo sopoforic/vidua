@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from varipatch import bps
+from vidua import bps
 
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 
