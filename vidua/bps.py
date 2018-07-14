@@ -1,11 +1,16 @@
+"""Validate and apply BPS patches."""
 import logging
 import zlib
 from io import BytesIO
+from typing import BinaryIO
 
 logger = logging.getLogger(__name__)
 
-def decode_number(bps_patch):
-    """Return the next number in bps_file."""
+def decode_number(bps_patch: BinaryIO) -> int:
+    """Return the next number in ``bps_patch``.
+
+    :param bps_patch: the patch file
+    """
     data = 0
     shift = 1
     while True:
@@ -24,7 +29,18 @@ def decode_number(bps_patch):
             data += shift
     return data
 
-def patch_info(bps_patch):
+def patch_info(bps_patch: BinaryIO) -> dict:
+    """Return a dictionary of information about the patch.
+
+        >>> patch_info(bps_patch)
+        {'target_size': 24,
+         'metadata': b'',
+         'final_checksum': 2648610592,
+         'source_checksum': 3418748557,
+         'source_size': 37}
+
+    :param bps_patch: the patch file
+    """
     validate_patch(bps_patch)
     info = {}
     bps_patch.seek(4)
@@ -38,10 +54,13 @@ def patch_info(bps_patch):
     bps_patch.seek(0)
     return info
 
-def validate_patch(bps_patch):
-    """Verify that bps_patch is a valid BPS patch.
-    
-    If the patch is invalid, raise a ValueError describing the problem.
+def validate_patch(bps_patch: BinaryIO):
+    """Verify that ``bps_patch`` is a valid BPS patch.
+
+    If the patch is valid, return. If the patch is invalid, raise a
+    ``ValueError`` describing the problem.
+
+    :param bps_patch: the patch file
     """
     bps_patch.seek(0)
     if bps_patch.read(4) != b'BPS1':
@@ -140,8 +159,12 @@ def validate_patch(bps_patch):
     if target_position != target_size:
         raise ValueError("Final patch size incorrect. Expected: {}. Actual: {}".format(target_size, target_position))
 
-def patch(source, bps_patch):
-    """Return a bytestream containing the patched source."""
+def patch(source: BinaryIO, bps_patch: BinaryIO) -> BinaryIO:
+    """Return the patched source.
+
+    :param source: the source file to be patched
+    :param bps_patch: the patch file
+    """
     bps_patch.seek(0)
     validate_patch(bps_patch)
 

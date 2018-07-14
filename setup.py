@@ -18,6 +18,11 @@ setup(name='vidua',
           'Topic :: Utilities',
       ],
       packages=['vidua'],
+      entry_points={
+        'console_scripts': [
+            'vidua = vidua.scripts:main',
+        ],
+      },
       setup_requires=['setuptools_scm', 'pytest-runner'],
       tests_require=['pytest'],
       use_scm_version=True,
