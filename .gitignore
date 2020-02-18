@@ -5,3 +5,5 @@ dist/
 build/
 htmlcov/
 .coverage
+.eggs/
+.mypy_cache/
