@@ -207,12 +207,10 @@ def patch(source: BinaryIO, bps_patch: BinaryIO) -> BinaryIO:
     metadata_size = decode_number(bps_patch)
     bps_patch.seek(metadata_size, 1)
 
-    source_position = 0
     outread_position = 0
     output = BytesIO()
 
     while bps_patch.tell() < patch_end - 12:
-        bps_pos = bps_patch.tell()
         data = decode_number(bps_patch)
         command = data & 3
         length = (data >> 2) + 1
