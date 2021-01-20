@@ -182,6 +182,18 @@ Target position: 0x{:x}""".format(
             target_size, target_position))
 
 
+def validate_checksum(source, bps_patch):
+    """Ensure that the source file matches the checksum in the patch."""
+    bps_patch.seek(-12, 2)
+    checksum = int.from_bytes(bps_patch.read(4), byteorder='little')
+    source.seek(0)
+    calculated_checksum = zlib.crc32(source.read())
+    if calculated_checksum != checksum:
+        raise ValueError("Incompatible source. Stored checksum {:X}, actual checksum {:X}.".format(
+            checksum, calculated_checksum))
+    source.seek(0)
+
+
 def patch(source: BinaryIO, bps_patch: BinaryIO) -> BinaryIO:
     """Return the patched source.
 
@@ -191,14 +203,7 @@ def patch(source: BinaryIO, bps_patch: BinaryIO) -> BinaryIO:
     bps_patch.seek(0)
     validate_patch(bps_patch)
 
-    bps_patch.seek(-12, 2)
-    checksum = int.from_bytes(bps_patch.read(4), byteorder='little')
-    source.seek(0)
-    calculated_checksum = zlib.crc32(source.read())
-    if calculated_checksum != checksum:
-        raise ValueError("Incompatible source. Stored checksum {:X}, actual checksum {:X}.".format(
-            checksum, calculated_checksum))
-    source.seek(0)
+    validate_checksum(source, bps_patch)
 
     patch_end = bps_patch.seek(0, 2)
     bps_patch.seek(4)
