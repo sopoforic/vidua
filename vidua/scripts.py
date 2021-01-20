@@ -1,6 +1,5 @@
 import argparse
 import logging
-import sys
 
 from . import ips, bps
 from .util import identify, PatchType
@@ -9,17 +8,33 @@ logging.basicConfig(format='vidua: %(levelname)s: %(message)s', level=logging.IN
 logger = logging.getLogger()
 
 type_map = {
-    PatchType.IPS : ips,
-    PatchType.BPS : bps,
+    PatchType.IPS: ips,
+    PatchType.BPS: bps,
 }
+
 
 def main():
     parser = argparse.ArgumentParser(description='Apply or validate patches.')
-    parser.add_argument('patch', metavar='PATCH', type=argparse.FileType('rb'), help='the patch file')
-    parser.add_argument('original', nargs='?', metavar='ORIGINAL', type=argparse.FileType('rb'), help='the file to be patched')
-    parser.add_argument('output', nargs='?', metavar='OUTPUT', type=argparse.FileType('xb'), help='filename to write patched file')
-    parser.add_argument('-v', '--validate', action='store_true', help='validate the patch only; do not apply it')
-    parser.add_argument('-q', '--quiet', action='store_true', help='suppress output except errors')
+    parser.add_argument('patch',
+                        metavar='PATCH',
+                        type=argparse.FileType('rb'),
+                        help='the patch file')
+    parser.add_argument('original',
+                        nargs='?',
+                        metavar='ORIGINAL',
+                        type=argparse.FileType('rb'),
+                        help='the file to be patched')
+    parser.add_argument('output',
+                        nargs='?',
+                        metavar='OUTPUT',
+                        type=argparse.FileType('xb'),
+                        help='filename to write patched file')
+    parser.add_argument('-v', '--validate',
+                        action='store_true',
+                        help='validate the patch only; do not apply it')
+    parser.add_argument('-q', '--quiet',
+                        action='store_true',
+                        help='suppress output except errors')
 
     args = parser.parse_args()
 
