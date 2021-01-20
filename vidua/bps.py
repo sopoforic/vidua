@@ -4,6 +4,8 @@ import zlib
 from io import BytesIO
 from typing import BinaryIO
 
+from .util import copy_bytes
+
 logger = logging.getLogger(__name__)
 
 
@@ -218,26 +220,17 @@ def patch(source: BinaryIO, bps_patch: BinaryIO) -> BinaryIO:
             # SourceRead
             old_source_position = source.tell()
             source.seek(output.tell())
-            to_go = length
-            while to_go > 0:
-                output.write(source.read(min(to_go, 2**8)))
-                to_go -= 2**8
+            copy_bytes(source, output, length)
             source.seek(old_source_position)
         elif command == 1:
             # TargetRead
-            to_go = length
-            while to_go > 0:
-                output.write(bps_patch.read(min(to_go, 2**8)))
-                to_go -= 2**8
+            copy_bytes(bps_patch, output, length)
         elif command == 2:
             # SourceCopy
             copy_data = decode_number(bps_patch)
             source_relative_offset = (-1 if (copy_data & 1) else 1) * (copy_data >> 1)
             source.seek(source_relative_offset, 1)
-            to_go = length
-            while to_go > 0:
-                output.write(source.read(min(to_go, 2**8)))
-                to_go -= 2**8
+            copy_bytes(source, output, length)
         elif command == 3:
             # TargetCopy
             copy_data = decode_number(bps_patch)
