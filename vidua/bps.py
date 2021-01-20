@@ -113,37 +113,49 @@ def validate_patch(bps_patch: BinaryIO):
         data = decode_number(bps_patch)
         command = data & 3
         length = (data >> 2) + 1
-        error_details = "Offset: 0x{:x}\nCommand: {:d}\nLength: 0x{:x}\nSource position: 0x{:x}\nTarget position: 0x{:x}".format(
+        error_details = """\
+Offset: 0x{:x}
+Command: {:d}
+Length: 0x{:x}
+Source position: 0x{:x}
+Target position: 0x{:x}""".format(
             bps_pos, command, length, source_position, target_position)
         # logger.debug("Decoded a command.\n%s", error_details)
         if command == 0:
             # SourceRead
             target_position += length
             if target_position > source_size:
-                raise ValueError("Attempted to read beyond end of source.\n{}".format(error_details))
+                raise ValueError("Attempted to read beyond end of source.\n{}".format(
+                    error_details))
             if target_position > target_size:
-                raise ValueError("Attempted to write beyond end of target.\n{}".format(error_details))
+                raise ValueError("Attempted to write beyond end of target.\n{}".format(
+                    error_details))
         elif command == 1:
             # TargetRead
             target_position += length
             if target_position > target_size:
-                raise ValueError("Attempted to write beyond end of target.\n{}".format(error_details))
+                raise ValueError("Attempted to write beyond end of target.\n{}".format(
+                    error_details))
             bps_patch.seek(length, 1)
             if bps_patch.tell() > patch_end - 12:
-                raise ValueError("TargetRead length too large.\n{}".format(error_details))
+                raise ValueError("TargetRead length too large.\n{}".format(
+                    error_details))
         elif command == 2:
             # SourceCopy
             copy_data = decode_number(bps_patch)
             source_relative_offset = (-1 if (copy_data & 1) else 1) * (copy_data >> 1)
             error_details += "\nSRO: {}".format(source_relative_offset)
             if source_position + source_relative_offset < 0:
-                raise ValueError("Attempted to read beyond beginning of source.\n{}".format(error_details))
+                raise ValueError("Attempted to read beyond beginning of source.\n{}".format(
+                    error_details))
             source_position += source_relative_offset + length
             if source_position > source_size:
-                raise ValueError("Attempted to read beyond end of source.\n{}".format(error_details))
+                raise ValueError("Attempted to read beyond end of source.\n{}".format(
+                    error_details))
             target_position += length
             if target_position > target_size:
-                raise ValueError("Attempted to write beyond end of target.\n{}".format(error_details))
+                raise ValueError("Attempted to write beyond end of target.\n{}".format(
+                    error_details))
         elif command == 3:
             # TargetCopy
             copy_data = decode_number(bps_patch)
@@ -151,16 +163,20 @@ def validate_patch(bps_patch: BinaryIO):
             outread_position += target_relative_offset
             error_details += "\nTRO: {}".format(target_relative_offset)
             if outread_position < 0:
-                raise ValueError("Attempted to read beyond beginning of target.\n{}".format(error_details))
+                raise ValueError("Attempted to read beyond beginning of target.\n{}".format(
+                    error_details))
             if outread_position >= target_position:
-                raise ValueError("Attempted to read beyond end of target.\n{}".format(error_details))
+                raise ValueError("Attempted to read beyond end of target.\n{}".format(
+                    error_details))
             target_position += length
             if target_position > target_size:
-                raise ValueError("Attempted to write beyond end of target.\n{}".format(error_details))
+                raise ValueError("Attempted to write beyond end of target.\n{}".format(
+                    error_details))
             outread_position += length
 
     if target_position != target_size:
-        raise ValueError("Final patch size incorrect. Expected: {}. Actual: {}".format(target_size, target_position))
+        raise ValueError("Final patch size incorrect. Expected: {}. Actual: {}".format(
+            target_size, target_position))
 
 
 def patch(source: BinaryIO, bps_patch: BinaryIO) -> BinaryIO:
@@ -177,7 +193,8 @@ def patch(source: BinaryIO, bps_patch: BinaryIO) -> BinaryIO:
     source.seek(0)
     calculated_checksum = zlib.crc32(source.read())
     if calculated_checksum != checksum:
-        raise ValueError("Incompatible source. Stored checksum {:X}, actual checksum {:X}.".format(checksum, calculated_checksum))
+        raise ValueError("Incompatible source. Stored checksum {:X}, actual checksum {:X}.".format(
+            checksum, calculated_checksum))
     source.seek(0)
 
     patch_end = bps_patch.seek(0, 2)
@@ -242,7 +259,8 @@ def patch(source: BinaryIO, bps_patch: BinaryIO) -> BinaryIO:
     if calculated_checksum == checksum:
         logger.debug("Patch applied successfully.")
     else:
-        raise ValueError("Invalid checksum. Stored checksum {:X}, actual checksum {:X}.".format(checksum, calculated_checksum))
+        raise ValueError("Invalid checksum. Stored checksum {:X}, actual checksum {:X}.".format(
+            checksum, calculated_checksum))
 
     output.seek(0)
     return output
