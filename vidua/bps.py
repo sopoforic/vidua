@@ -77,7 +77,8 @@ def validate_patch(bps_patch: BinaryIO):
     calculated_checksum = zlib.crc32(bps_patch.read(patch_end - 4))
     checksum = int.from_bytes(bps_patch.read(4), byteorder='little')
     if calculated_checksum != checksum:
-        raise ValueError("Invalid checksum. Stored checksum {:X}, actual checksum {:X}.".format(checksum, calculated_checksum))
+        raise ValueError("Invalid checksum. Stored checksum {:X}, actual checksum {:X}.".format(
+            checksum, calculated_checksum))
 
     bps_patch.seek(4)
 

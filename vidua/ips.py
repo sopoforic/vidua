@@ -32,9 +32,7 @@ def validate_patch(ips_patch):
                 raise ValueError("Ran out of data in IPS patch file. Offset: 0x{:X}".format(pos))
 
     post_end = ips_patch.read(4)
-    if len(post_end) == 0:
-        pass
-    elif len(post_end) != 3:
+    if post_end and len(post_end) != 3:
         raise ValueError("Data past end of IPS file.")
 
 
