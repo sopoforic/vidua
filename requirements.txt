@@ -1,2 +1,0 @@
-typing==3.7.4.3; python_version < '3.5'
-enum34==1.1.10; python_version < '3.4'

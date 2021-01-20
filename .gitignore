@@ -7,3 +7,5 @@ htmlcov/
 .coverage
 .eggs/
 .mypy_cache/
+Pipfile
+Pipfile.lock

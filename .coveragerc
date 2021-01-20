@@ -1,0 +1,5 @@
+[run]
+omit =
+    vidua/test/*
+    setup.py
+    vidua/scripts.py
