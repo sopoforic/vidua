@@ -1,8 +1,10 @@
 from enum import Enum
 
+
 class PatchType(Enum):
     IPS = 1
     BPS = 2
+
 
 def identify(patch):
     patch.seek(0)

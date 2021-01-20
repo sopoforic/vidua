@@ -15,6 +15,7 @@ test_files = [
 
 test_files = [(os.path.join(BASE_PATH, f[0]), f[1]) for f in test_files]
 
+
 @pytest.mark.parametrize("patch_file,patch_type", test_files)
 def test_identify(patch_file, patch_type):
     with open(patch_file, 'rb') as patch_file:

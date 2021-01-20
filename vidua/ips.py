@@ -1,5 +1,6 @@
 from io import BytesIO
 
+
 def validate_patch(ips_patch):
     ips_patch.seek(0)
     header = ips_patch.read(5)
@@ -13,7 +14,7 @@ def validate_patch(ips_patch):
             raise ValueError("Ran out of data in IPS patch file. Offset: 0x{:X}".format(pos))
         if offset == b'EOF':
             break
-        
+
         offset = int.from_bytes(offset, byteorder='big')
         size = int.from_bytes(ips_patch.read(2), byteorder='big')
 
@@ -36,6 +37,7 @@ def validate_patch(ips_patch):
     elif len(post_end) != 3:
         raise ValueError("Data past end of IPS file.")
 
+
 def patch(source, ips_patch):
     validate_patch(ips_patch)
     ips_patch.seek(5)
@@ -48,7 +50,7 @@ def patch(source, ips_patch):
         offset = ips_patch.read(3)
         if offset == b'EOF':
             break
-        
+
         offset = int.from_bytes(offset, byteorder='big')
         output.seek(offset)
         size = int.from_bytes(ips_patch.read(2), byteorder='big')
@@ -61,7 +63,7 @@ def patch(source, ips_patch):
         else:
             value = ips_patch.read(size)
             output.write(value)
-    
+
     post_end = ips_patch.read(3)
     if post_end:
         end = int.from_bytes(post_end, byteorder='big')

@@ -6,6 +6,7 @@ from typing import BinaryIO
 
 logger = logging.getLogger(__name__)
 
+
 def decode_number(bps_patch: BinaryIO) -> int:
     """Return the next number in ``bps_patch``.
 
@@ -28,6 +29,7 @@ def decode_number(bps_patch: BinaryIO) -> int:
             shift <<= 7
             data += shift
     return data
+
 
 def patch_info(bps_patch: BinaryIO) -> dict:
     """Return a dictionary of information about the patch.
@@ -54,6 +56,7 @@ def patch_info(bps_patch: BinaryIO) -> dict:
     bps_patch.seek(0)
     return info
 
+
 def validate_patch(bps_patch: BinaryIO):
     """Verify that ``bps_patch`` is a valid BPS patch.
 
@@ -65,17 +68,17 @@ def validate_patch(bps_patch: BinaryIO):
     bps_patch.seek(0)
     if bps_patch.read(4) != b'BPS1':
         raise ValueError("Invalid file format marker.")
-    
+
     patch_end = bps_patch.seek(0, 2)
     if patch_end < 19:
         raise ValueError("Patch too short.")
-    
+
     bps_patch.seek(0)
     calculated_checksum = zlib.crc32(bps_patch.read(patch_end - 4))
     checksum = int.from_bytes(bps_patch.read(4), byteorder='little')
     if calculated_checksum != checksum:
         raise ValueError("Invalid checksum. Stored checksum {:X}, actual checksum {:X}.".format(checksum, calculated_checksum))
-    
+
     bps_patch.seek(4)
 
     try:
@@ -89,7 +92,7 @@ def validate_patch(bps_patch: BinaryIO):
         logger.debug("Target size: 0x%x", target_size)
     except ValueError:
         raise ValueError("Failed to decode target size.")
-    
+
     try:
         metadata_size = decode_number(bps_patch)
         logger.debug("Metadata size: 0x%x", metadata_size)
@@ -108,7 +111,7 @@ def validate_patch(bps_patch: BinaryIO):
     while bps_patch.tell() < patch_end - 12:
         bps_pos = bps_patch.tell()
         data = decode_number(bps_patch)
-        command = data & 3;
+        command = data & 3
         length = (data >> 2) + 1
         error_details = "Offset: 0x{:x}\nCommand: {:d}\nLength: 0x{:x}\nSource position: 0x{:x}\nTarget position: 0x{:x}".format(
             bps_pos, command, length, source_position, target_position)
@@ -155,9 +158,10 @@ def validate_patch(bps_patch: BinaryIO):
             if target_position > target_size:
                 raise ValueError("Attempted to write beyond end of target.\n{}".format(error_details))
             outread_position += length
-    
+
     if target_position != target_size:
         raise ValueError("Final patch size incorrect. Expected: {}. Actual: {}".format(target_size, target_position))
+
 
 def patch(source: BinaryIO, bps_patch: BinaryIO) -> BinaryIO:
     """Return the patched source.
@@ -190,7 +194,7 @@ def patch(source: BinaryIO, bps_patch: BinaryIO) -> BinaryIO:
     while bps_patch.tell() < patch_end - 12:
         bps_pos = bps_patch.tell()
         data = decode_number(bps_patch)
-        command = data & 3;
+        command = data & 3
         length = (data >> 2) + 1
         if command == 0:
             # SourceRead
@@ -239,6 +243,6 @@ def patch(source: BinaryIO, bps_patch: BinaryIO) -> BinaryIO:
         logger.debug("Patch applied successfully.")
     else:
         raise ValueError("Invalid checksum. Stored checksum {:X}, actual checksum {:X}.".format(checksum, calculated_checksum))
-    
+
     output.seek(0)
     return output
