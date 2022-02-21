@@ -213,8 +213,8 @@ def patch(source: BinaryIO, bps_patch: BinaryIO) -> BinaryIO:
 
     patch_end = bps_patch.seek(0, 2)
     bps_patch.seek(4)
-    source_size = decode_number(bps_patch)
-    target_size = decode_number(bps_patch)
+    source_size = decode_number(bps_patch)  # noqa: F841
+    target_size = decode_number(bps_patch)  # noqa: F841
     metadata_size = decode_number(bps_patch)
     bps_patch.seek(metadata_size, 1)
 
