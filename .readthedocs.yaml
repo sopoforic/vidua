@@ -9,6 +9,9 @@ sphinx:
   configuration: docs/conf.py
 
 python:
-  pip_install: true
   install:
   - requirements: docs/requirements.txt
+  - method: pip
+    path: .
+    extra_requirements:
+      - docs
