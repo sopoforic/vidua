@@ -4,7 +4,7 @@ import tempfile
 
 
 def test_script(script_runner):
-    ret = script_runner.run('vidua/__main__.py', '--help')
+    ret = script_runner.run('vidua', '--help')
     assert ret.success
     assert 'usage:' in ret.stdout
     assert ret.stderr == ''
