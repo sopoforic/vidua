@@ -182,8 +182,14 @@ Target position: 0x{:x}""".format(
             target_size, target_position))
 
 
-def validate_checksum(source, bps_patch):
-    """Ensure that the source file matches the checksum in the patch."""
+def validate_checksum(source: BinaryIO, bps_patch: BinaryIO):
+    """Ensure that the source file matches the checksum in the patch.
+
+    If the checksum matches, return. Otherwise, raise a ``ValueError``.
+
+    :param source: the file to be patched
+    :param bps_patch: the patch file
+    """
     bps_patch.seek(-12, 2)
     checksum = int.from_bytes(bps_patch.read(4), byteorder='little')
     source.seek(0)

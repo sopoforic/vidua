@@ -1,7 +1,15 @@
 from io import BytesIO
+from typing import BinaryIO
 
 
-def validate_patch(ips_patch):
+def validate_patch(ips_patch: BinaryIO):
+    """Verify that ``ips_patch`` is a valid BPS patch.
+
+    If the patch is valid, return. If the patch is invalid, raise a
+    ``ValueError`` describing the problem.
+
+    :param ips_patch: the patch file
+    """
     ips_patch.seek(0)
     header = ips_patch.read(5)
     if header != b'PATCH':
@@ -36,7 +44,12 @@ def validate_patch(ips_patch):
         raise ValueError("Data past end of IPS file.")
 
 
-def patch(source, ips_patch):
+def patch(source: BinaryIO, ips_patch: BinaryIO) -> BinaryIO:
+    """Return the patched source.
+
+    :param source: the source file to be patched
+    :param ips_patch: the patch file
+    """
     validate_patch(ips_patch)
     ips_patch.seek(5)
 
