@@ -39,13 +39,12 @@ def patch_info(bps_patch: BinaryIO) -> dict:
         >>> patch_info(bps_patch)
         {'target_size': 24,
          'metadata': b'',
-         'final_checksum': 2648610592,
+         'target_checksum': 2648610592,
          'source_checksum': 3418748557,
          'source_size': 37}
 
     :param bps_patch: the patch file
     """
-    validate_patch(bps_patch)
     info = {}
     bps_patch.seek(4)
     info['source_size'] = decode_number(bps_patch)
@@ -54,7 +53,7 @@ def patch_info(bps_patch: BinaryIO) -> dict:
     info['metadata'] = bps_patch.read(metadata_size)
     bps_patch.seek(-12, 2)
     info['source_checksum'] = int.from_bytes(bps_patch.read(4), byteorder='little')
-    info['final_checksum'] = int.from_bytes(bps_patch.read(4), byteorder='little')
+    info['target_checksum'] = int.from_bytes(bps_patch.read(4), byteorder='little')
     bps_patch.seek(0)
     return info
 

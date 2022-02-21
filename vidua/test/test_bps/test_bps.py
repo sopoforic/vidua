@@ -29,7 +29,7 @@ def test_bps_a_get_info():
         assert info['target_size'] == 24
         assert info['metadata'] == b''
         assert info['source_checksum'] == 0xcbc5f68d
-        assert info['final_checksum'] == 0x9dde9720
+        assert info['target_checksum'] == 0x9dde9720
 
 
 @pytest.mark.parametrize("bps_path,original_path,modded_path", valid_test_files)
