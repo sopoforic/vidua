@@ -11,6 +11,7 @@ Welcome to vidua's documentation!
    :caption: Contents:
 
    vidua
+   bps
 
 Indices and tables
 ==================

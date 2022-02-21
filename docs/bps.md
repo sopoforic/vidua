@@ -1,4 +1,4 @@
-# BPS
+# BPS notes
 
 Documentation on this format from byuu can be found
 [here](https://www.romhacking.net/documents/746/). I compared my understanding
@@ -28,3 +28,4 @@ conclusions:
 ## Checksums
 
 Checksums are little-endian.
+
