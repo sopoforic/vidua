@@ -1,12 +1,7 @@
 # vidua
 
-Vidua can be used to apply patches. It is intended particularly for use with ROM
+Vidua can be used to apply (BPS or IPS) patches. It is intended particularly for use with ROM
 hacks.
-
-## Supported patch formats
-
-* BPS
-* IPS
 
 ## Usage
 
@@ -57,4 +52,4 @@ Alcaro's [Floating IPS](https://www.smwcentral.net/?p=section&a=details&id=11474
 was very useful in working out how to handle BPS files when byuu's documentation
 was unclear.
 
-[![Build Status](https://travis-ci.org/sopoforic/vidua.svg?branch=master)](https://travis-ci.org/sopoforic/vidua)
+![Test](https://github.com/sopoforic/vidua/actions/workflows/test.yml/badge.svg?event=push)
