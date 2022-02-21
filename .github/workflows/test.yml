@@ -17,6 +17,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install flake8 pytest pytest-cov pytest-console-scripts
+        pip install -e .
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 -o cc-test-reporter
         chmod +x cc-test-reporter
