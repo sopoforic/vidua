@@ -3,6 +3,12 @@
 Vidua can be used to apply (BPS or IPS) patches. It is intended particularly for use with ROM
 hacks.
 
+## Installation
+
+```shell
+pip install vidua
+```
+
 ## Usage
 
 A simple script is included to validate or apply patches from the command line:
