@@ -11,5 +11,5 @@ Pipfile
 Pipfile.lock
 docs/_build/
 docs/modules.rst
-docs/vidua.rst
-docs/vidua.test.rst
+docs/vidua.*
+

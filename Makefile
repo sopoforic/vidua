@@ -30,7 +30,6 @@ coverage:
 	@open htmlcov/index.html
 
 docs: clean-docs
-	sphinx-apidoc -o docs/ vidua
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 	open docs/_build/html/index.html
