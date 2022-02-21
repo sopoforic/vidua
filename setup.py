@@ -26,4 +26,9 @@ setup(name='vidua',
       setup_requires=['setuptools_scm', 'pytest-runner'],
       tests_require=['pytest'],
       use_scm_version=True,
-      zip_safe=True)
+      zip_safe=True,
+      project_urls={
+          'Documentation': 'https://vidua.readthedocs.io/',
+          'Issues': 'https://github.com/sopoforic/vidua/issues',
+      },
+)
