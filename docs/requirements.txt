@@ -1,2 +1,2 @@
+myst-parser==0.17.0
 sphinx-autodoc-typehints==1.17.0
-
