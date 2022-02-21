@@ -31,4 +31,4 @@ setup(name='vidua',
           'Documentation': 'https://vidua.readthedocs.io/',
           'Issues': 'https://github.com/sopoforic/vidua/issues',
       },
-)
+      )
