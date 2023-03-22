@@ -18,6 +18,9 @@ setup(name='vidua',
           'Topic :: Utilities',
       ],
       packages=['vidua'],
+      package_data={
+        'vidua': ['py.typed'],
+      },
       entry_points={
         'console_scripts': [
             'vidua = vidua.scripts:main',
